@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: backend
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: ${PORT:8080}
+
+cors:
+  allowedOrigin: ${CORS_ORIGIN:http://localhost:3000}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev_secret_change_me}
+    expiryMillis: 86400000
