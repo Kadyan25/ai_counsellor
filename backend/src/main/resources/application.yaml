@@ -41,3 +41,8 @@ app:
   perplexity:
     apiKey: ${PERPLEXITY_API_KEY:}
     model: ${PERPLEXITY_MODEL:sonar-small}
+
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+
