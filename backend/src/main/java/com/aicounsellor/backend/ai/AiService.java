@@ -160,13 +160,32 @@ public class AiService {
                 %s
                 """.formatted(context.toString(), message);
 
-        // Call AI provider (auto fallback)
-        Map<String, Object> raw = router.generateRaw(systemPrompt, userPrompt);
+        Map<String, Object> json;
 
-        // Parse JSON from response
-        Map<String, Object> json = parser.extractJson(raw);
+        try {
+            // Call AI provider (auto fallback)
+            Map<String, Object> raw = router.generateRaw(systemPrompt, userPrompt);
 
-        String reply = String.valueOf(json.getOrDefault("reply", "Sorry, I couldn't generate a reply."));
+            if (raw == null || raw.isEmpty()) {
+                throw new RuntimeException("AI returned empty response");
+            }
+
+            json = parser.extractJson(raw);
+
+        } catch (Exception e) {
+
+            // 🔒 HARD SAFETY FALLBACK — NEVER BREAK JSON CONTRACT
+            json = Map.of(
+                "reply", "I’m warming up. Please click retry — your data is safe.",
+                "actions", List.of()
+            );
+        }
+
+
+        String reply = json.get("reply") instanceof String
+                ? (String) json.get("reply")
+                : "I’m warming up. Please retry.";
+
         AiMessage aiMsg = new AiMessage();
         aiMsg.setUserId(userId);
         aiMsg.setRole("assistant");
@@ -277,5 +296,6 @@ public class AiService {
 public List<AiMessage> getHistory(UUID userId) {
     return aiMessageRepo.findByUserIdOrderByCreatedAtAsc(userId);
 }
+
 
 }
