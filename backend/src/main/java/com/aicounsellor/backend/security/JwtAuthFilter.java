@@ -39,7 +39,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UUID userId = jwtService.validateAndGetUserId(token);
 
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userId, null, null);
+                    new UsernamePasswordAuthenticationToken(
+                        userId,
+                        null,
+                        java.util.List.of() // ✅ EMPTY authorities, NOT null
+                    );
+
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

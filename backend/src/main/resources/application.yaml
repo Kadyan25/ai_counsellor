@@ -26,3 +26,18 @@ app:
   jwt:
     secret: ${JWT_SECRET:dev_secret_change_me}
     expiryMillis: 86400000
+
+  ai:
+    provider: ${AI_PROVIDER:auto}   # auto | gemini | openrouter | perplexity
+
+  gemini:
+    apiKey: ${GEMINI_API_KEY:}
+    model: ${GEMINI_MODEL:gemini-1.5-flash}
+
+  openrouter:
+    apiKey: ${OPENROUTER_API_KEY:}
+    model: ${OPENROUTER_MODEL:meta-llama/llama-3.1-70b-instruct}
+
+  perplexity:
+    apiKey: ${PERPLEXITY_API_KEY:}
+    model: ${PERPLEXITY_MODEL:sonar-small}

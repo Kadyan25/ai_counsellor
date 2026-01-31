@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
+/* --------------------
+   Design Tokens
+--------------------- */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --primary: #4f46e5;      /* indigo-600 */
+  --primary-dark: #4338ca; /* indigo-700 */
+
+  --success: #16a34a;      /* green-600 */
+  --warning: #f59e0b;      /* amber-500 */
+  --danger: #dc2626;       /* red-600 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +22,41 @@
   }
 }
 
+/* --------------------
+   Base styles
+--------------------- */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* --------------------
+   Utility polish
+--------------------- */
+button {
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Accent helpers (used implicitly via Tailwind classes) */
+.text-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.bg-primary:hover {
+  background-color: var(--primary-dark);
+}
+/* ===== Aurora Glass Utility ===== */
+.glass-card {
+  @apply border border-white/10 rounded-2xl p-5 bg-white/5 backdrop-blur-xl shadow-xl;
 }
