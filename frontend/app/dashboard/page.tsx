@@ -27,7 +27,6 @@ export default function DashboardPage() {
   const router = useRouter();
   const [data, setData] = useState<Dashboard | null>(null);
 
-  /* ---------------- effects ALWAYS first ---------------- */
   useEffect(() => {
     const token = getToken();
     if (!token) {
@@ -48,25 +47,25 @@ export default function DashboardPage() {
       });
   }, [router]);
 
-  /* ---------------- hooks must NOT depend on early return ---------------- */
   const nextStep = useMemo(() => {
     if (!data) return null;
 
     const stage = data.stage;
 
-    if (stage <= 1) {
+    // 🔒 STRICT GATING
+    if (stage <= 2) {
       return {
-        title: "Discover universities",
-        desc: "Get AI-recommended Dream / Target / Safe universities",
-        btn: "Go to Universities",
-        route: "/universities",
+        title: "Talk to AI Counsellor",
+        desc: "Complete AI counselling to unlock universities",
+        btn: "Ask AI Counsellor",
+        route: "/counsellor",
       };
     }
 
-    if (stage === 2 || stage === 3) {
+    if (stage === 3) {
       return {
-        title: "Lock at least one university",
-        desc: "This commitment step unlocks application guidance",
+        title: "Discover universities",
+        desc: "Get AI-recommended Dream / Target / Safe universities",
         btn: "Go to Universities",
         route: "/universities",
       };
@@ -80,7 +79,6 @@ export default function DashboardPage() {
     };
   }, [data]);
 
-  /* ---------------- NOW it is safe to early-return ---------------- */
   if (!data) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -109,7 +107,6 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen p-6">
       <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
         <header className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">Dashboard</h1>
@@ -173,11 +170,18 @@ export default function DashboardPage() {
             </div>
 
             <button
-              onClick={() => router.push(nextStep.route)}
+              onClick={() => {
+                if (data.stage === 1) {
+                  router.push("/counsellor");
+                } else {
+                  router.push(nextStep.route);
+                }
+              }}
               className="px-5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
             >
               {nextStep.btn}
             </button>
+
           </section>
         )}
 

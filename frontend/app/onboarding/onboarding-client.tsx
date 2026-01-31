@@ -50,7 +50,6 @@ export default function OnboardingClient() {
 
     apiFetch<any>("/profile", {}, token)
       .then((p) => {
-        // prefill
         setEducationLevel(p.educationLevel || "Bachelors");
         setMajor(p.major || "");
         setGradYear(p.gradYear || 2024);
@@ -60,7 +59,9 @@ export default function OnboardingClient() {
         setFieldOfStudy(p.fieldOfStudy || "");
         setIntakeYear(p.intakeYear || 2026);
 
-        setPreferredCountries(p.preferredCountries?.length ? p.preferredCountries : ["USA"]);
+        setPreferredCountries(
+          p.preferredCountries?.length ? p.preferredCountries : ["USA"]
+        );
         setBudgetPerYear(p.budgetPerYear || 40000);
         setFundingPlan(p.fundingPlan || "Loan");
 
@@ -68,7 +69,6 @@ export default function OnboardingClient() {
         setGreStatus(p.greStatus || "Not started");
         setSopStatus(p.sopStatus || "Not started");
 
-        // ❗ only redirect if NOT edit mode
         if (p.onboardingCompleted && !isEdit) {
           router.push("/dashboard");
         }
@@ -142,9 +142,9 @@ export default function OnboardingClient() {
           <h2 className="font-medium">A) Academic Background</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             <select className={select} value={educationLevel} onChange={(e) => setEducationLevel(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Bachelors</option>
-              <option className="bg-zinc-900 text-white">Masters</option>
-              <option className="bg-zinc-900 text-white">Diploma</option>
+              <option>Bachelors</option>
+              <option>Masters</option>
+              <option>Diploma</option>
             </select>
 
             <input className={input} placeholder="Major" value={major} onChange={(e) => setMajor(e.target.value)} />
@@ -158,10 +158,10 @@ export default function OnboardingClient() {
           <h2 className="font-medium">B) Study Goal</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             <select className={select} value={intendedDegree} onChange={(e) => setIntendedDegree(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Masters</option>
-              <option className="bg-zinc-900 text-white">Bachelors</option>
-              <option className="bg-zinc-900 text-white">MBA</option>
-              <option className="bg-zinc-900 text-white">PhD</option>
+              <option>Masters</option>
+              <option>Bachelors</option>
+              <option>MBA</option>
+              <option>PhD</option>
             </select>
 
             <input className={input} placeholder="Field of Study" value={fieldOfStudy} onChange={(e) => setFieldOfStudy(e.target.value)} />
@@ -192,9 +192,9 @@ export default function OnboardingClient() {
           <div className="grid sm:grid-cols-2 gap-3">
             <input className={input} type="number" placeholder="Budget per year (USD)" value={budgetPerYear} onChange={(e) => setBudgetPerYear(+e.target.value)} />
             <select className={select} value={fundingPlan} onChange={(e) => setFundingPlan(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Self</option>
-              <option className="bg-zinc-900 text-white">Loan</option>
-              <option className="bg-zinc-900 text-white">Scholarship</option>
+              <option>Self</option>
+              <option>Loan</option>
+              <option>Scholarship</option>
             </select>
           </div>
         </section>
@@ -203,23 +203,32 @@ export default function OnboardingClient() {
         <section className="space-y-3">
           <h2 className="font-medium">D) Exams & Readiness</h2>
           <div className="grid sm:grid-cols-3 gap-3">
-            <select className={select} value={ieltsStatus} onChange={(e) => setIeltsStatus(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Not started</option>
-              <option className="bg-zinc-900 text-white">In progress</option>
-              <option className="bg-zinc-900 text-white">Completed</option>
-            </select>
+            <div>
+              <p className="text-xs text-zinc-400 mb-1">IELTS</p>
+              <select className={select} value={ieltsStatus} onChange={(e) => setIeltsStatus(e.target.value)}>
+                <option>Not started</option>
+                <option>In progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
 
-            <select className={select} value={greStatus} onChange={(e) => setGreStatus(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Not started</option>
-              <option className="bg-zinc-900 text-white">In progress</option>
-              <option className="bg-zinc-900 text-white">Completed</option>
-            </select>
+            <div>
+              <p className="text-xs text-zinc-400 mb-1">GRE</p>
+              <select className={select} value={greStatus} onChange={(e) => setGreStatus(e.target.value)}>
+                <option>Not started</option>
+                <option>In progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
 
-            <select className={select} value={sopStatus} onChange={(e) => setSopStatus(e.target.value)}>
-              <option className="bg-zinc-900 text-white">Not started</option>
-              <option className="bg-zinc-900 text-white">Draft</option>
-              <option className="bg-zinc-900 text-white">Ready</option>
-            </select>
+            <div>
+              <p className="text-xs text-zinc-400 mb-1">SOP</p>
+              <select className={select} value={sopStatus} onChange={(e) => setSopStatus(e.target.value)}>
+                <option>Not started</option>
+                <option>Draft</option>
+                <option>Ready</option>
+              </select>
+            </div>
           </div>
         </section>
 
