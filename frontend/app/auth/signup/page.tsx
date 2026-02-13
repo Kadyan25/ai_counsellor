@@ -66,7 +66,7 @@ export default function SignupPage() {
 
         <input
           className="w-full border rounded p-2"
-          placeholder="Password"
+          placeholder="Password Should be atleast 6 characters"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
