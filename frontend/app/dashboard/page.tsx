@@ -26,25 +26,38 @@ type Dashboard = {
 export default function DashboardPage() {
   const router = useRouter();
   const [data, setData] = useState<Dashboard | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     const token = getToken();
     if (!token) {
-      router.push("/auth/login");
+      router.replace("/auth/login");
       return;
     }
 
     apiFetch<Dashboard>("/dashboard", {}, token)
       .then((d) => {
-        setData(d);
+        if (!active) return;
         if (!d.profile?.onboardingCompleted) {
-          router.push("/onboarding");
+          router.replace("/onboarding");
+          return;
         }
+        setData(d);
       })
       .catch(() => {
+        if (!active) return;
         clearToken();
-        router.push("/auth/login");
+        router.replace("/auth/login");
+      })
+      .finally(() => {
+        if (!active) return;
+        setLoading(false);
       });
+
+    return () => {
+      active = false;
+    };
   }, [router]);
 
   const nextStep = useMemo(() => {
@@ -79,7 +92,7 @@ export default function DashboardPage() {
     };
   }, [data]);
 
-  if (!data) {
+  if (loading || !data) {
     return (
       <main className="min-h-screen flex items-center justify-center">
         <p className="text-zinc-400">Loading dashboard…</p>

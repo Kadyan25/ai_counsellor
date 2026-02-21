@@ -26,7 +26,16 @@ export default function SignupPage() {
       });
 
       saveToken(data.token);
-      router.push("/dashboard");
+      const profile = await apiFetch<{ onboardingCompleted?: boolean }>(
+        "/profile",
+        {},
+        data.token
+      );
+      if (profile.onboardingCompleted) {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/onboarding");
+      }
     } catch (err: any) {
       setError(err.message || "Signup failed");
     } finally {

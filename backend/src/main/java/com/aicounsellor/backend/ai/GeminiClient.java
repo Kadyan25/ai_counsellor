@@ -14,7 +14,7 @@ public class GeminiClient implements LLMClient {
     @Value("${app.gemini.apiKey}")
     private String apiKey;
 
-    @Value("${app.gemini.model:gemini-1.5-flash}")
+    @Value("${app.gemini.model:gemini-2.5-flash-lite}")
     private String model;
 
     public GeminiClient() {

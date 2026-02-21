@@ -13,13 +13,11 @@ public class AiModelRouter {
     private String provider;
 
     private final GeminiClient gemini;
-    private final OpenRouterClient openRouter;
-    private final PerplexityClient perplexity;
+    private final GroqClient groq;
 
-    public AiModelRouter(GeminiClient gemini, OpenRouterClient openRouter, PerplexityClient perplexity) {
+    public AiModelRouter(GeminiClient gemini, GroqClient groq) {
         this.gemini = gemini;
-        this.openRouter = openRouter;
-        this.perplexity = perplexity;
+        this.groq = groq;
     }
 
     public Map<String, Object> generateRaw(String systemPrompt, String userPrompt) {
@@ -30,7 +28,7 @@ public class AiModelRouter {
         }
 
         // auto fallback order
-        List<LLMClient> order = List.of(gemini, openRouter, perplexity);
+        List<LLMClient> order = List.of(gemini, groq);
 
         RuntimeException last = null;
         for (LLMClient client : order) {
@@ -49,8 +47,7 @@ public class AiModelRouter {
     private LLMClient pick(String p) {
         return switch (p) {
             case "gemini" -> gemini;
-            case "openrouter" -> openRouter;
-            case "perplexity" -> perplexity;
+            case "groq" -> groq;
             default -> throw new RuntimeException("Unknown AI_PROVIDER: " + p);
         };
     }

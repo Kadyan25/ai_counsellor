@@ -35,21 +35,16 @@ app:
     expiryMillis: 86400000
 
   ai:
-    provider: ${AI_PROVIDER:auto}   # auto | gemini | openrouter | perplexity
+    provider: ${AI_PROVIDER:auto}   # auto | gemini | groq
 
   gemini:
     apiKey: ${GEMINI_API_KEY:}
-    model: ${GEMINI_MODEL:gemini-1.5-flash}
+    model: ${GEMINI_MODEL:gemini-2.5-flash-lite}
 
-  openrouter:
-    apiKey: ${OPENROUTER_API_KEY:}
-    model: ${OPENROUTER_MODEL:meta-llama/llama-3.1-70b-instruct}
-
-  perplexity:
-    apiKey: ${PERPLEXITY_API_KEY:}
-    model: ${PERPLEXITY_MODEL:sonar-small}
+  groq:
+    apiKey: ${GROQ_API_KEY:}
+    model: ${GROQ_MODEL:llama-3.1-8b-instant}
 
 logging:
   level:
     com.zaxxer.hikari: DEBUG
-

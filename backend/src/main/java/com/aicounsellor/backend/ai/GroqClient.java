@@ -7,50 +7,46 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class OpenRouterClient implements LLMClient {
+public class GroqClient implements LLMClient {
 
     private final WebClient webClient;
 
-    @Value("${app.openrouter.apiKey}")
+    @Value("${app.groq.apiKey}")
     private String apiKey;
 
-    @Value("${app.openrouter.model}")
+    @Value("${app.groq.model:llama-3.1-8b-instant}")
     private String model;
 
-    public OpenRouterClient() {
+    public GroqClient() {
         this.webClient = WebClient.builder()
-                .baseUrl("https://openrouter.ai")
+                .baseUrl("https://api.groq.com/openai/v1")
                 .build();
     }
 
     @Override
     public String name() {
-        return "openrouter";
+        return "groq";
     }
 
     @Override
     public Map<String, Object> generateRaw(String systemPrompt, String userPrompt) {
         if (apiKey == null || apiKey.isBlank()) {
-            throw new RuntimeException("OPENROUTER_API_KEY is missing");
+            throw new RuntimeException("GROQ_API_KEY is missing");
         }
 
-        // OpenRouter: POST /api/v1/chat/completions
-        // https://openrouter.ai/docs#requests
         Map<String, Object> body = Map.of(
                 "model", model,
                 "messages", new Object[]{
                         Map.of("role", "system", "content", systemPrompt),
                         Map.of("role", "user", "content", userPrompt)
                 },
-                "temperature", 0.3
+                "temperature", 0.2
         );
 
         return webClient.post()
-                .uri("/api/v1/chat/completions")
+                .uri("/chat/completions")
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
-                .header("HTTP-Referer", "http://localhost") // recommended by OpenRouter
-                .header("X-Title", "AI Counsellor Hackathon")
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(Map.class)
